@@ -1,0 +1,18 @@
+# Байкал Интеграция — сайт на Laravel. Файл собирает deploy/install.sh:
+# подставляются домен, папка сайта и сокет PHP-FPM. Правки руками затрутся при следующей установке.
+server {
+    listen 80;
+    listen [::]:80;
+    server_name __DOMAIN__ www.__DOMAIN__;
+
+    root __APP_DIR__/public;
+    index index.php;
+    charset utf-8;
+    client_max_body_size 20m;
+    __NOINDEX__
+
+    # Проверка домена для Let's Encrypt
+    location ^~ /.well-known/acme-challenge/ { root __APP_DIR__/public; default_type text/plain; }
+
+__BODY__
+}
