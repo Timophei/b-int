@@ -11,7 +11,7 @@
         $pageTitle = $section?->seo_title ?: trim($plainTitle.' — '.$settings->company_name, ' —');
         $pageDescription = Str::squish($section?->seo_description ?: ($section?->lead ?: 'Поддержка, обновление и восстановление коробочных порталов Битрикс24.'));
         $ogImage = $section?->og_image ?: $section?->cover;
-        $ogImageUrl = $ogImage ? (str_starts_with($ogImage, 'http') ? $ogImage : $root.'/storage/'.$ogImage) : $root.'/img/og.png';
+        $ogImageUrl = $ogImage ? (str_starts_with($ogImage, 'http') ? $ogImage : $root.'/storage/'.$ogImage) : $root.'/img/og.jpg';
     @endphp
     <title>{{ $pageTitle }}</title>
     <meta name="description" content="{{ $pageDescription }}">
@@ -36,7 +36,7 @@
     @php
         $organization = array_filter([
             '@'.'context' => 'https://schema.org', '@'.'type' => 'Organization', 'name' => $settings->company_name, 'url' => $root,
-            'email' => $settings->email, 'telephone' => $settings->phone, 'logo' => $root.'/img/logo-header.png',
+            'email' => $settings->email, 'telephone' => $settings->phone, 'logo' => $root.'/img/icon.png',
         ]);
     @endphp
     <script type="application/ld+json">{!! json_encode($organization, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES) !!}</script>

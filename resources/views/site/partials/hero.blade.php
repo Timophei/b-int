@@ -1,14 +1,13 @@
-{{-- Тёмная шапка. Кольцо — фрагмент из макета справа, слева продолжение тёмной воды.
-     Своя картинка из админки (широкая) заменяет и то и другое. --}}
+{{-- Тёмная шапка: подложка с кольцом над водой или своя картинка раздела из админки --}}
 @php($big ??= false)
-<section @class(['hero', 'hero-big' => $big, 'hero-cover' => $section->cover])>
+<section @class(['hero', 'hero-big' => $big])>
     @if ($section->cover)
         <img class="hero-photo" src="/storage/{{ $section->cover }}" alt="" fetchpriority="high">
+    @else
+        <img class="hero-photo hero-photo-default" src="/img/hero.jpg" srcset="/img/hero-1024.jpg 1024w, /img/hero.jpg 2048w"
+             sizes="(max-width: 600px) 300vw, 100vw" alt="" width="2048" height="768" fetchpriority="high">
     @endif
     <div class="wrap hero-in">
-        @unless ($section->cover)
-            <img class="hero-ring" src="/img/hero-ring.png" alt="" width="168" height="326" fetchpriority="high">
-        @endunless
         <div class="hero-text">
             @if ($eyebrow ?? $section->eyebrow)<p class="eyebrow">{{ $eyebrow ?? $section->eyebrow }}</p>@endif
             <h1 class="hero-title">{{ \App\Support\Typo::title($section->title) }}</h1>

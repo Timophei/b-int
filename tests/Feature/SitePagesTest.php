@@ -24,7 +24,7 @@ class SitePagesTest extends TestCase
             ->assertSeeInOrder(['Ваш человек', 'Чтобы всё работало', 'Обновления и обслуживание', '25 000 ₽',
                 'Обсудить поддержку', 'Сложное восстановление', 'Сначала стабильность', 'Как работаем',
                 'Регулярные регламентные работы', 'Начнём с вашего портала', 'Берём на поддержку'])
-            ->assertSee('/img/logo-header.png')
+            ->assertSee('/img/logo-mark.png')->assertSee('/img/hero.jpg')
             ->assertSee('data-menu-toggle', false)
             ->assertDontSee('row-title')
             ->assertSee('{"@context":"https://schema.org","@type":"Organization"', false);

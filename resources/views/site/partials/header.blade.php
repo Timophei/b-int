@@ -3,9 +3,7 @@
 @include('site.partials.icons')
 <header class="header">
     <div class="wrap header-in">
-        <a class="logo" href="/" aria-label="{{ $settings->company_name }} — на главную">
-            <img src="/img/logo-header.png" alt="{{ $settings->company_name }}" width="165" height="50">
-        </a>
+        @include('site.partials.logo')
         <nav class="nav" id="site-menu" aria-label="Разделы">
             <ul>
                 @foreach ($menu as $item)
