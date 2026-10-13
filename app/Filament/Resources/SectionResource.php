@@ -4,6 +4,7 @@ namespace App\Filament\Resources;
 
 use App\Filament\Forms\SeoFields;
 use App\Filament\Resources\SectionResource\Pages;
+use App\Models\Plan;
 use App\Models\Section;
 use Filament\Forms;
 use Filament\Forms\Form;
@@ -62,9 +63,11 @@ class SectionResource extends Resource
                     ]),
                     Forms\Components\TextInput::make('eyebrow')->label('Надпись над заголовком')->maxLength(255),
                     Forms\Components\Textarea::make('title')->label('Заголовок')->required()->rows(2)->maxLength(255)
-                        ->helperText('Точка в конце подсвечивается голубым. Перенос строки — Enter.'),
+                        ->helperText('Точка или вопрос в конце подсвечиваются голубым; «^.» подсветит точку в середине. Перенос строки — Enter.'),
                     Forms\Components\TextInput::make('subtitle')->label('Подзаголовок')->maxLength(255),
                     Forms\Components\Textarea::make('lead')->label('Вводный абзац')->rows(3)->maxLength(500),
+                    Forms\Components\TextInput::make('hero_button')->label('Кнопка в шапке')->maxLength(60)
+                        ->helperText('Ведёт на «Написать» с темой раздела. Пусто — без кнопки'),
                     Forms\Components\TextInput::make('teaser')->label('Строка о разделе на главной')->maxLength(255),
                     Forms\Components\FileUpload::make('cover')->label('Картинка шапки')->image()->disk('public')->directory('covers')
                         ->maxSize(8192)->imageEditor()
@@ -89,6 +92,8 @@ class SectionResource extends Resource
                         ->addActionLabel('Добавить тариф')
                         ->helperText('Первый тариф — карточка рядом с услугами. Нет тарифа — вместо цены «Обсудим задачу».')
                         ->schema([
+                            Forms\Components\Select::make('group')->label('Где показывать')->options(Plan::GROUPS)
+                                ->default('main')->required()->native(false),
                             Forms\Components\Grid::make(3)->schema([
                                 Forms\Components\TextInput::make('name')->label('Название тарифа')->maxLength(255)->placeholder('необязательно'),
                                 Forms\Components\TextInput::make('price')->label('Цена')->required()->maxLength(60)->placeholder('25 000 ₽'),
@@ -107,9 +112,48 @@ class SectionResource extends Resource
                                 Forms\Components\TextInput::make('offer_pdf_label')->label('Текст ссылки')->maxLength(60)->placeholder('Скачать оффер · PDF'),
                             ]),
                         ]),
-                    Forms\Components\TextInput::make('cta_label')->label('Текст кнопки, если тарифа нет')->maxLength(255),
+                    Forms\Components\TextInput::make('cta_label')->label('Текст кнопки, если тарифа нет (и в светлом призыве)')->maxLength(255),
+                    Forms\Components\Grid::make(2)->schema([
+                        Forms\Components\TextInput::make('plans_title')->label('Заголовок ежемесячных тарифов')->maxLength(255),
+                        Forms\Components\TextInput::make('plans_note')->label('Подпись под ними')->maxLength(500),
+                    ]),
+                ]),
+                Forms\Components\Tabs\Tab::make('Примеры')->badge(fn (?Section $record) => $record?->cases()->count() ?: null)->schema([
+                    Forms\Components\Grid::make(2)->schema([
+                        Forms\Components\TextInput::make('cases_kicker')->label('Надпись над блоком')->maxLength(60)->placeholder('Примеры'),
+                        Forms\Components\TextInput::make('cases_title')->label('Заголовок')->maxLength(255)->placeholder('Четыре сценария. Уже в работе.'),
+                    ]),
+                    Forms\Components\Repeater::make('cases')->relationship()->hiddenLabel()
+                        ->orderColumn('sort')->reorderableWithButtons()->collapsible()->cloneable()
+                        ->itemLabel(fn (array $state) => trim(($state['title'] ?? '').(filled($state['tag'] ?? null) ? ' · '.$state['tag'] : '')) ?: null)
+                        ->addActionLabel('Добавить пример')
+                        ->schema([
+                            Forms\Components\Grid::make(3)->schema([
+                                Forms\Components\TextInput::make('title')->label('Кто работает')->required()->maxLength(255),
+                                Forms\Components\TextInput::make('tag')->label('Где (метка)')->maxLength(100),
+                                Forms\Components\Select::make('icon')->label('Иконка')->options(Section::ICONS)->native(false),
+                            ]),
+                            Forms\Components\Textarea::make('text')->label('Что делает')->rows(2)->maxLength(500),
+                            Forms\Components\Grid::make(2)->schema([
+                                Forms\Components\TextInput::make('link_url')->label('Ссылка')->url()->maxLength(255),
+                                Forms\Components\TextInput::make('link_label')->label('Текст ссылки')->maxLength(100)->placeholder('gorodchaya.ru'),
+                            ]),
+                        ]),
                 ]),
                 Forms\Components\Tabs\Tab::make('Блоки')->schema([
+                    Forms\Components\Fieldset::make('Заголовок над услугами')->columns(2)->schema([
+                        Forms\Components\TextInput::make('services_kicker')->label('Надпись')->maxLength(60)->placeholder('Возможности'),
+                        Forms\Components\TextInput::make('services_title')->label('Заголовок')->maxLength(255)->placeholder('Сделаем и для вас.'),
+                    ]),
+                    Forms\Components\Fieldset::make('Светлый призыв')->columns(1)->schema([
+                        Forms\Components\Textarea::make('band_title')->label('Заголовок')->rows(2)->maxLength(255),
+                        Forms\Components\TextInput::make('band_text')->label('Текст')->maxLength(500),
+                    ]),
+                    Forms\Components\Fieldset::make('Тёмный баннер в конце')->columns(1)->schema([
+                        Forms\Components\TextInput::make('final_title')->label('Заголовок')->maxLength(255),
+                        Forms\Components\TextInput::make('final_text')->label('Текст')->maxLength(500),
+                        Forms\Components\TextInput::make('final_button')->label('Кнопка')->maxLength(60),
+                    ]),
                     Forms\Components\Fieldset::make('Акцентный блок')->columns(1)->schema([
                         Forms\Components\Textarea::make('highlight_title')->label('Заголовок')->rows(2)->maxLength(255)
                             ->placeholder("Сначала стабильность.\nЗатем развитие."),
@@ -123,6 +167,7 @@ class SectionResource extends Resource
                     ]),
                 ]),
                 Forms\Components\Tabs\Tab::make('Шаги')->badge(fn (?Section $record) => $record?->steps()->count() ?: null)->schema([
+                    Forms\Components\TextInput::make('steps_kicker')->label('Надпись над блоком')->maxLength(60)->placeholder('Запуск и условия'),
                     Forms\Components\TextInput::make('steps_title')->label('Заголовок блока')->maxLength(255)->placeholder('Начнём с вашего портала.'),
                     Forms\Components\Repeater::make('steps')->relationship()->hiddenLabel()
                         ->orderColumn('sort')->reorderableWithButtons()->collapsible()
@@ -131,7 +176,9 @@ class SectionResource extends Resource
                         ->schema([
                             Forms\Components\TextInput::make('title')->label('Шаг')->required()->maxLength(255),
                             Forms\Components\TextInput::make('text')->label('Пояснение')->maxLength(500),
-                        ])->columns(2),
+                            Forms\Components\Select::make('icon')->label('Иконка')->options(Section::ICONS)->native(false)
+                                ->helperText('Нужна только на страницах с плитками шагов'),
+                        ])->columns(3),
                 ]),
                 Forms\Components\Tabs\Tab::make('SEO')->schema(SeoFields::make()),
             ]),

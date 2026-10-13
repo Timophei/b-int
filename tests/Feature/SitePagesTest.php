@@ -30,6 +30,30 @@ class SitePagesTest extends TestCase
             ->assertSee('{"@context":"https://schema.org","@type":"Organization"', false);
     }
 
+    public function test_ai_page_follows_mockup(): void
+    {
+        $this->get('/ii-sotrudniki/')->assertOk()
+            ->assertSeeInOrder(['Нейросети выходят', 'Подобрать ИИ сотрудника', 'Четыре сценария', 'Консультант интернет-магазина',
+                'Город чая', 'gorodchaya.ru', 'Внутренний консультант', 'Ваши знания', 'Сделаем и для вас', 'Примет обращения',
+                'Какую задачу поручим', 'Обсудить задачу', 'От вашей задачи', 'Подключаем к работе', 'Базовая настройка',
+                '50 000 ₽', 'Ежемесячное сопровождение', 'от 5 000 ₽', '40 000 ₽', 'Тариф подбираем', 'Начнём с вашей задачи', 'Обсудить запуск'])
+            ->assertSee('/img/hero-ai.jpg')
+            ->assertSee('#ic-cart', false)
+            ->assertSee('/napisat/?tema=ai');
+    }
+
+    public function test_ai_page_hides_blocks_left_empty_in_admin(): void
+    {
+        $ai = Section::byKey('ai');
+        $ai->cases()->delete();
+        $ai->plans()->delete();
+        $ai->update(['final_title' => null]);
+
+        $this->get('/ii-sotrudniki/')->assertOk()
+            ->assertDontSee('Четыре сценария')->assertDontSee('class="setup"', false)->assertDontSee('Обсудить запуск')
+            ->assertSee('Сделаем и для вас');
+    }
+
     public function test_menu_has_sections_from_mockup(): void
     {
         $this->get('/')->assertSeeInOrder(['Поддержка', 'ИИ сотрудники', 'Битрикс24', 'О нас', 'https://btxcap.ru', 'Курсы'], false);
@@ -49,7 +73,7 @@ class SitePagesTest extends TestCase
     public function test_each_section_has_its_own_page(): void
     {
         $this->get('/podderzhka/')->assertOk()->assertSee('Обновления и обслуживание')->assertSee('Кому подходит');
-        $this->get('/ii-sotrudniki/')->assertOk()->assertSee('Консультант для клиентов')->assertSee('Обсудим задачу');
+        $this->get('/ii-sotrudniki/')->assertOk()->assertSee('Нейросети выходят');
         $this->get('/napisat/')->assertOk()->assertSee('name="consent"', false);
         $this->get('/politika/')->assertOk();
     }
@@ -96,7 +120,7 @@ class SitePagesTest extends TestCase
     {
         $this->actingAs(User::factory()->create());
 
-        foreach (['/admin', '/admin/sections', '/admin/sections/2/edit', '/admin/sections/create', '/admin/leads', '/admin/nastroiki', '/admin/analitika'] as $url) {
+        foreach (['/admin', '/admin/sections', '/admin/sections/2/edit', '/admin/sections/3/edit', '/admin/sections/create', '/admin/leads', '/admin/nastroiki', '/admin/analitika'] as $url) {
             $this->get($url)->assertOk();
         }
     }

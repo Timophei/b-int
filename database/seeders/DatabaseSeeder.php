@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 use App\Models\Section;
 use App\Models\Setting;
+use Database\Seeders\Content\AiEmployeesContent;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -72,27 +73,12 @@ class DatabaseSeeder extends Seeder
             ['Берём на поддержку', 'Согласовываем условия и начинаем работать.'],
         ]);
 
-        $this->section('ai', [
-            'path' => 'ii-sotrudniki', 'nav_label' => 'ИИ сотрудники', 'sort' => 2,
-            'eyebrow' => 'ИИ сотрудники',
-            'title' => 'Знают ваш ассортимент.',
-            'subtitle' => 'Помогают клиентам и команде.',
-            'lead' => 'Собираем ИИ-помощника на ваших материалах: каталоге, прайсах, регламентах. Он отвечает клиентам и сотрудникам и передаёт заявки в Битрикс24.',
-            'teaser' => 'Знают ваш ассортимент. Помогают клиентам и команде.',
-            'steps_title' => 'Как запускаем.',
-            'cta_label' => 'Обсудить ИИ сотрудника',
-            'seo_title' => 'ИИ сотрудники для бизнеса и Битрикс24 — Байкал Интеграция',
-            'seo_description' => 'ИИ-помощники на ваших материалах: консультируют клиентов, отвечают команде, передают заявки в Битрикс24.',
-        ], services: [
-            ['Консультант для клиентов', 'Отвечает на сайте и в мессенджерах'],
-            ['Помощник для команды', 'Подсказывает по регламентам и базе знаний'],
-            ['Связь с Битрикс24', 'Заводит лиды и сделки, ставит задачи'],
-            ['Обучение на ваших данных', 'Каталог, прайсы, ответы на частые вопросы'],
-        ], steps: [
-            ['Разбираем задачу', 'Где теряется время и что должен уметь помощник.'],
-            ['Собираем знания', 'Каталог, прайсы, регламенты, типовые ответы.'],
-            ['Запускаем и дообучаем', 'Смотрим на живые диалоги и правим.'],
+        $ai = $this->section('ai', [
+            'path' => 'ii-sotrudniki', 'nav_label' => 'ИИ сотрудники', 'sort' => 2, 'title' => 'ИИ сотрудники.',
         ]);
+        if ($ai) {
+            AiEmployeesContent::apply($ai);
+        }
 
         $this->section('bitrix', [
             'path' => 'bitrix24', 'nav_label' => 'Битрикс24', 'sort' => 3,
@@ -152,10 +138,10 @@ class DatabaseSeeder extends Seeder
      * @param  array<string, mixed>|null  $plan
      * @param  array<int, array{0: string, 1: string}>  $steps
      */
-    private function section(string $key, array $attributes, array $services = [], ?array $plan = null, array $steps = []): void
+    private function section(string $key, array $attributes, array $services = [], ?array $plan = null, array $steps = []): ?Section
     {
         if (Section::where('key', $key)->exists()) {
-            return;
+            return null;
         }
 
         $section = Section::create(['key' => $key, ...$attributes]);
@@ -168,5 +154,7 @@ class DatabaseSeeder extends Seeder
         foreach ($steps as $i => [$title, $text]) {
             $section->steps()->create(['title' => $title, 'text' => $text, 'sort' => $i]);
         }
+
+        return $section;
     }
 }

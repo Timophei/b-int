@@ -114,6 +114,69 @@ ul, ol { margin: 0; padding: 0; list-style: none; }
 .steps h3 { font-size: 18px; line-height: 24px; }
 .steps p { margin-top: 2px; font-size: 16px; line-height: 22px; color: var(--muted); }
 
+/* Кнопка-рамка на тёмном фоне */
+.btn-ghost { display: inline-flex; align-items: center; justify-content: center; gap: 12px; min-height: 52px; margin-top: 22px; padding: 12px 26px;
+  border: 1px solid rgba(255, 255, 255, .75); border-radius: 4px; color: #fff; font: 500 18px/1.2 var(--font); transition: background .15s, border-color .15s; }
+.btn-ghost:hover { background: rgba(255, 255, 255, .1); border-color: #fff; }
+.btn-ghost .i { width: 20px; height: 20px; }
+.hero-ai .hero-photo { object-position: 92% 30%; }
+.hero-ai::before { background: linear-gradient(90deg, rgba(1, 12, 19, .9) 0%, rgba(1, 12, 19, .7) 60%, rgba(1, 12, 19, .35) 100%); }
+
+/* Плитки примеров и шагов с иконками */
+.tiles { margin-top: 18px; display: grid; }
+.tile { display: grid; grid-template-columns: 40px 56px minmax(0, 1fr); gap: 0 14px; align-items: start; padding: 18px 0 20px; border-top: 1px solid var(--line); }
+.tile-icon { display: inline-flex; align-items: center; justify-content: center; width: 56px; height: 56px; border-radius: 50%; background: var(--card); color: var(--brand); }
+.tile-icon svg { width: 32px; height: 32px; }
+.tile h3 { font-size: 20px; line-height: 26px; padding-top: 2px; }
+.tile p { margin-top: 8px; font-size: 16px; line-height: 22px; color: var(--muted); }
+.tag { display: inline-block; margin-top: 8px; padding: 3px 12px; border-radius: 999px; background: var(--card); color: var(--link); font-size: 15px; line-height: 22px; }
+.tile-link { display: inline-flex; align-items: center; gap: 4px; min-height: 44px; margin-top: 2px; color: var(--link); font-size: 17px; }
+.tile-link:hover { text-decoration: underline; text-underline-offset: 4px; }
+
+/* Заголовок | линия | текст */
+.split { position: relative; display: grid; gap: 12px; margin-top: 24px; padding: 26px 0 24px; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); }
+.split::before, .accent-top::before { content: ""; position: absolute; top: -2px; left: 0; width: 52px; height: 4px; background: var(--accent); }
+.split-text { font-size: 20px; line-height: 28px; color: var(--muted); }
+.block-lined { padding-top: 24px; }
+
+/* Возможности: номер, название, пояснение */
+.caps { margin-top: 18px; }
+.caps li { display: grid; grid-template-columns: 50px minmax(0, 1fr); gap: 4px 0; padding: 16px 0 18px; border-bottom: 1px solid var(--line); }
+.caps h3 { font-size: 20px; line-height: 26px; }
+.caps p { grid-column: 2; font-size: 16px; line-height: 22px; color: var(--muted); }
+
+/* Светлый призыв */
+.cta-light { display: grid; gap: 18px; margin: 30px -9px 0; padding: 24px 18px; background: var(--card); border-radius: 6px; }
+.cta-light p { margin-top: 8px; font-size: 18px; line-height: 25px; color: var(--muted); }
+.cta-light .btn { margin-top: 0; }
+
+/* Разовая настройка */
+.setup { position: relative; display: grid; gap: 16px; margin: 28px -9px 0; padding: 30px 18px 22px; background: var(--card); border-radius: 6px; }
+.setup::before { content: ""; position: absolute; top: 18px; left: 18px; width: 44px; height: 4px; background: var(--accent); }
+.setup-main p { margin-top: 6px; font-size: 18px; line-height: 25px; color: var(--muted); }
+.setup-price { display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 14px; padding-top: 14px; border-top: 1px solid rgba(8, 12, 41, .12); }
+.setup-price b, .tier-price b { font-size: 44px; line-height: 48px; font-weight: 500; letter-spacing: -0.02em; }
+.setup-price span, .tier-price span { font-size: 20px; line-height: 26px; color: var(--muted); }
+
+/* Ежемесячные тарифы */
+.tiers-block { margin-top: 34px; }
+.accent-top { position: relative; padding-top: 22px; }
+.tiers { margin-top: 10px; }
+.tiers li { padding: 16px 0 18px; border-bottom: 1px solid var(--line); }
+.tiers h3 { font-size: 20px; line-height: 26px; }
+.tier-price { display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 14px; margin-top: 8px; }
+.tier-note { margin-top: 6px; font-size: 16px; line-height: 22px; color: var(--muted); }
+.tiers-note { margin-top: 16px; font-size: 16px; line-height: 22px; color: var(--muted); }
+
+/* Тёмный финальный баннер */
+.cta-dark { position: relative; overflow: hidden; isolation: isolate; margin: 32px -9px 0; border-radius: 6px; background: #01131d; color: #fff; }
+.cta-dark img { position: absolute; inset: 0; z-index: -2; width: 100%; height: 100%; object-fit: cover; object-position: 75% 60%; max-width: none; }
+.cta-dark::before { content: ""; position: absolute; inset: 0; z-index: -1; background: linear-gradient(90deg, rgba(1, 12, 19, .85), rgba(1, 12, 19, .45) 60%, rgba(1, 12, 19, .1)); }
+.cta-dark-in { padding: 28px 18px 26px; }
+.cta-dark .h2 { color: #fff; }
+.cta-dark p { margin-top: 8px; color: rgba(255, 255, 255, .9); }
+.cta-dark .btn-ghost { margin-top: 18px; }
+
 /* Текст из админки */
 .prose { margin-top: 32px; max-width: 760px; }
 .prose h2 { font-size: 30px; line-height: 34px; margin: 28px 0 12px; }
@@ -177,6 +240,10 @@ ul, ol { margin: 0; padding: 0; list-style: none; }
   .card { margin-inline: 0; padding: 24px 26px; max-width: 560px; }
   .contact-form { margin-inline: 0; padding: 28px; }
   .steps { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 0 16px; }
+  .cta-light, .setup, .cta-dark { margin-inline: 0; }
+  .cta-light, .setup { padding: 28px 30px; }
+  .setup::before { left: 30px; }
+  .cta-dark-in { padding: 34px 36px; }
 }
 
 /* Компьютер */
@@ -225,6 +292,41 @@ ul, ol { margin: 0; padding: 0; list-style: none; }
 
   .contact { grid-template-columns: minmax(0, 1fr) minmax(0, 540px); gap: 64px; padding-top: 64px; align-items: start; }
   .page-text { padding-top: 64px; }
+
+  .hero-ai .hero-photo { object-position: 70% 30%; }
+  .hero-ai::before { background: linear-gradient(90deg, rgba(1, 12, 19, .55) 0%, rgba(1, 12, 19, .2) 45%, rgba(1, 12, 19, 0) 65%); }
+  .tiles { grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: 48px; margin-top: 34px; }
+  .tile { grid-template-columns: 48px 64px minmax(0, 1fr); gap: 0 20px; padding: 24px 0 28px; position: relative; }
+  .tile:nth-child(odd)::after { content: ""; position: absolute; top: 24px; bottom: 24px; right: -24px; border-right: 1px solid var(--line); }
+  .tile-icon { width: 64px; height: 64px; }
+  .tile-icon svg { width: 36px; height: 36px; }
+  .tile h3 { font-size: 22px; line-height: 28px; }
+  .tile p { font-size: 16px; line-height: 23px; }
+  .split { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 0; margin-top: 8px; padding: 34px 0 30px; align-items: center; }
+  .split-title { padding-right: 48px; }
+  .split-text { padding-left: 48px; border-left: 1px solid var(--line); min-height: 76px; display: flex; align-items: center; }
+  .block-lined { padding-top: 40px; }
+  .caps { margin-top: 26px; }
+  .caps li { grid-template-columns: 64px minmax(0, 5fr) minmax(0, 6fr); gap: 0; align-items: center; padding: 20px 0 22px; }
+  .caps h3 { font-size: 22px; line-height: 28px; padding-right: 24px; }
+  .caps p { grid-column: auto; padding-left: 28px; border-left: 1px solid var(--line); min-height: 44px; display: flex; align-items: center; }
+  .cta-light { grid-template-columns: minmax(0, 1fr) auto; align-items: center; gap: 40px; margin-top: 34px; padding: 34px 40px; }
+  .cta-light .btn { width: auto; min-width: 250px; }
+  .tiles-steps { margin-top: 30px; }
+  .setup { grid-template-columns: minmax(0, 1fr) auto; align-items: center; gap: 40px; margin-top: 36px; padding: 44px 40px 34px; }
+  .setup::before { top: 30px; left: 40px; }
+  .setup-price { flex-direction: column; align-items: flex-end; padding: 0 0 0 48px; border-top: 0; border-left: 1px solid rgba(8, 12, 41, .12); }
+  .setup-price b { font-size: 56px; line-height: 60px; }
+  .tiers-block { margin-top: 44px; padding-top: 34px; border-top: 1px solid var(--line); }
+  .tiers { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); margin-top: 22px; }
+  .tiers li { padding: 6px 32px 8px; border-bottom: 0; }
+  .tiers li:first-child { padding-left: 0; }
+  .tiers li + li { border-left: 1px solid var(--line); }
+  .tier-price { margin-top: 18px; }
+  .tiers-note { margin-top: 26px; }
+  .cta-dark { margin-top: 40px; }
+  .cta-dark-in { padding: 40px 40px 36px; }
+  .cta-dark .h2 { font-size: 44px; line-height: 50px; }
 
   .footer { margin-top: 72px; }
   .footer-in { padding-top: 20px; padding-bottom: 22px; }

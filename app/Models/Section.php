@@ -29,6 +29,32 @@ class Section extends Model
         'privacy' => 'Политика конфиденциальности',
     ];
 
+    /**
+     * Иконки для примеров и шагов (рисунки — в site/partials/icons).
+     *
+     * @var array<string, string>
+     */
+    public const ICONS = [
+        'cart' => 'Корзина',
+        'chat' => 'Сообщение',
+        'leaf' => 'Лист',
+        'doc' => 'Документ',
+        'book' => 'Книга',
+        'gear' => 'Шестерёнка',
+        'plug' => 'Подключение',
+        'target' => 'Цель',
+        'people' => 'Люди',
+    ];
+
+    /**
+     * Фоновые картинки шапки по разделам, пока в админке не загружена своя.
+     *
+     * @var array<string, string>
+     */
+    private const HERO_IMAGES = [
+        'ai' => 'hero-ai',
+    ];
+
     protected $guarded = ['id'];
 
     protected function casts(): array
@@ -50,9 +76,14 @@ class Section extends Model
         return $this->hasMany(Plan::class)->orderBy('sort')->orderBy('id');
     }
 
+    public function cases(): HasMany
+    {
+        return $this->hasMany(CaseStudy::class)->orderBy('sort')->orderBy('id');
+    }
+
     public function plan(): HasOne
     {
-        return $this->hasOne(Plan::class)->orderBy('sort')->orderBy('id');
+        return $this->hasOne(Plan::class)->where('group', 'main')->orderBy('sort')->orderBy('id');
     }
 
     public function steps(): HasMany
@@ -86,6 +117,22 @@ class Section extends Model
         }
 
         return $this->path === '' || $this->path === null ? '/' : '/'.trim($this->path, '/').'/';
+    }
+
+    /**
+     * Картинка шапки: своя из админки или фирменная по разделу.
+     *
+     * @return array{src: string, srcset: ?string}
+     */
+    public function heroImage(): array
+    {
+        if ($this->cover) {
+            return ['src' => '/storage/'.$this->cover, 'srcset' => null];
+        }
+
+        $name = self::HERO_IMAGES[$this->key] ?? 'hero';
+
+        return ['src' => "/img/{$name}.jpg", 'srcset' => "/img/{$name}-1024.jpg 1024w, /img/{$name}.jpg 2048w"];
     }
 
     /** Номер раздела в оформлении: 01, 02… */

@@ -38,7 +38,7 @@ class SiteController extends Controller
             return redirect()->away($section->external_url);
         }
 
-        $section->load(['services', 'plans', 'steps']);
+        $section->load(['services', 'plans', 'steps', 'cases']);
         $view = match ($section->key) {
             'contact' => 'site.contact',
             'privacy' => 'site.text',

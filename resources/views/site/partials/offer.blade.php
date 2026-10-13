@@ -1,5 +1,5 @@
 {{-- Услуги, карточка тарифа (или приглашение обсудить) и сноска под карточкой --}}
-@php($plan = $plan ?? $section->plans->first())
+@php($plan = $plan ?? $section->plans->firstWhere('group', 'main'))
 @php($contact = \App\Models\Section::byKey('contact'))
 @php($buttonLabel = $plan?->button_label ?: ($section->cta_label ?: 'Обсудить'))
 <div class="offer">

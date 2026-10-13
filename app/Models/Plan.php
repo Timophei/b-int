@@ -10,6 +10,15 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  */
 class Plan extends Model
 {
+    /**
+     * @var array<string, string>
+     */
+    public const GROUPS = [
+        'main' => 'Карточка рядом с услугами',
+        'setup' => 'Разовая настройка',
+        'monthly' => 'Ежемесячный тариф',
+    ];
+
     protected $guarded = ['id'];
 
     protected function casts(): array
