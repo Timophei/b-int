@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Support\Collection;
 
 /**
  * Раздел сайта — отдельная страница со своим адресом (или ссылка на внешний сайт).
@@ -21,6 +22,8 @@ class Section extends Model
         'home' => 'Главная',
         'support' => 'Поддержка',
         'ai' => 'ИИ сотрудники',
+        'bitrix' => 'Битрикс24',
+        'about' => 'О нас',
         'courses' => 'Курсы',
         'contact' => 'Написать',
         'privacy' => 'Политика конфиденциальности',
@@ -32,6 +35,7 @@ class Section extends Model
     {
         return [
             'in_nav' => 'boolean',
+            'process' => 'array',
             'is_published' => 'boolean',
         ];
     }
@@ -57,7 +61,7 @@ class Section extends Model
     }
 
     /** Разделы для меню и главной: опубликованные, по порядку, без главной и служебных. */
-    public static function navigation(): \Illuminate\Support\Collection
+    public static function navigation(): Collection
     {
         return static::query()->where('in_nav', true)
             ->when(! auth()->check(), fn (Builder $q) => $q->where('is_published', true))

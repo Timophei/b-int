@@ -18,15 +18,32 @@ class SitePagesTest extends TestCase
         $this->seed(DatabaseSeeder::class);
     }
 
-    public function test_home_shows_hero_support_offer_and_section_rows(): void
+    public function test_home_follows_support_mockup(): void
     {
         $this->get('/')->assertOk()
-            ->assertSee('Ваш человек')
-            ->assertSee('Чтобы всё работало')
-            ->assertSee('25 000 ₽')
-            ->assertSee('Начнём с вашего портала')
-            ->assertSee('/ii-sotrudniki/')
-            ->assertSee('https://btxcap.ru');
+            ->assertSeeInOrder(['Ваш человек', 'Чтобы всё работало', 'Обновления и обслуживание', '25 000 ₽',
+                'Обсудить поддержку', 'Сложное восстановление', 'Сначала стабильность', 'Как работаем',
+                'Регулярные регламентные работы', 'Начнём с вашего портала', 'Берём на поддержку'])
+            ->assertSee('/img/logo-header.png')
+            ->assertSee('data-menu-toggle', false)
+            ->assertDontSee('row-title')
+            ->assertSee('{"@context":"https://schema.org","@type":"Organization"', false);
+    }
+
+    public function test_menu_has_sections_from_mockup(): void
+    {
+        $this->get('/')->assertSeeInOrder(['Поддержка', 'ИИ сотрудники', 'Битрикс24', 'О нас', 'https://btxcap.ru', 'Курсы'], false);
+        $this->get('/bitrix24/')->assertOk();
+        $this->get('/o-nas/')->assertOk();
+    }
+
+    public function test_offer_pdf_link_appears_only_with_uploaded_file(): void
+    {
+        $this->get('/')->assertDontSee('Скачать оффер');
+
+        Section::byKey('support')->plans()->first()->update(['offer_pdf' => 'offers/offer.pdf']);
+
+        $this->get('/')->assertSee('Скачать оффер · PDF')->assertSee('/storage/offers/offer.pdf');
     }
 
     public function test_each_section_has_its_own_page(): void

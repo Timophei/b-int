@@ -1,32 +1,30 @@
 @php($contact = \App\Models\Section::byKey('contact'))
-<svg width="0" height="0" style="position:absolute" aria-hidden="true">
-    <defs>
-        <linearGradient id="mark-g" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#2bb4ea"/><stop offset="1" stop-color="#0f7fc0"/></linearGradient>
-        <symbol id="mark" viewBox="0 0 40 40">
-            <circle cx="13.5" cy="10" r="8" fill="url(#mark-g)"/>
-            <circle cx="26" cy="20" r="7" fill="url(#mark-g)" opacity=".9"/>
-            <circle cx="13" cy="30.5" r="8.5" fill="url(#mark-g)"/>
-            <circle cx="30.5" cy="8" r="3.2" fill="#2bb4ea"/>
-        </symbol>
-        <symbol id="i-arrow-out" viewBox="0 0 16 16"><path d="M4.5 11.5l7-7M6 4.5h5.5V10" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></symbol>
-        <symbol id="i-arrow-right" viewBox="0 0 16 16"><path d="M2.5 8h11M9 3.5L13.5 8 9 12.5" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></symbol>
-        <symbol id="i-check" viewBox="0 0 20 20"><circle cx="10" cy="10" r="8.5" fill="none" stroke="currentColor" stroke-width="1.4"/><path d="M6.3 10.2l2.4 2.4 5-5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></symbol>
-    </defs>
-</svg>
+@php($menu = \App\Models\Section::navigation())
+@include('site.partials.icons')
 <header class="header">
     <div class="wrap header-in">
-        @include('site.partials.brand')
-        <nav class="nav" aria-label="Разделы">
-            @foreach (\App\Models\Section::navigation() as $item)
-                @if ($item->isExternal())
-                    <a href="{{ $item->url() }}" target="_blank" rel="noopener" data-track="external" data-label="{{ $item->nav_label }}">{{ $item->nav_label }}<svg class="i"><use href="#i-arrow-out"/></svg></a>
-                @else
-                    <a href="{{ $item->url() }}" @if (isset($section) && $section?->is($item)) aria-current="page" @endif>{{ $item->nav_label }}</a>
+        <a class="logo" href="/" aria-label="{{ $settings->company_name }} — на главную">
+            <img src="/img/logo-header.png" alt="{{ $settings->company_name }}" width="165" height="50">
+        </a>
+        <nav class="nav" id="site-menu" aria-label="Разделы">
+            <ul>
+                @foreach ($menu as $item)
+                    <li>
+                        @if ($item->isExternal())
+                            <a href="{{ $item->url() }}" target="_blank" rel="noopener" data-track="external" data-label="{{ $item->nav_label }}">{{ $item->nav_label }}<svg class="i"><use href="#i-arrow-out"/></svg></a>
+                        @else
+                            <a href="{{ $item->url() }}" @if (isset($section) && $section?->is($item)) aria-current="page" @endif>{{ $item->nav_label }}</a>
+                        @endif
+                    </li>
+                @endforeach
+                @if ($contact)
+                    <li class="nav-cta"><a href="{{ $contact->url() }}" data-track="cta" data-label="Меню: {{ $contact->nav_label }}" @if (isset($section) && $section?->is($contact)) aria-current="page" @endif>{{ $contact->nav_label }}<svg class="i"><use href="#i-arrow-out"/></svg></a></li>
                 @endif
-            @endforeach
+            </ul>
         </nav>
-        @if ($contact)
-            <a class="header-cta" href="{{ $contact->url() }}" data-track="cta" data-label="Шапка: {{ $contact->nav_label }}">{{ $contact->nav_label }}<svg class="i"><use href="#i-arrow-out"/></svg></a>
-        @endif
+        <button class="burger" type="button" aria-controls="site-menu" aria-expanded="false" aria-label="Меню" data-menu-toggle>
+            <svg class="burger-open"><use href="#i-menu"/></svg>
+            <svg class="burger-close"><use href="#i-close"/></svg>
+        </button>
     </div>
 </header>

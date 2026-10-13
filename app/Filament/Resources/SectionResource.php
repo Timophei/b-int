@@ -97,10 +97,30 @@ class SectionResource extends Resource
                             Forms\Components\TagsInput::make('features')->label('Что входит')->placeholder('Добавить пункт и Enter')->reorderable(),
                             Forms\Components\Grid::make(2)->schema([
                                 Forms\Components\TextInput::make('button_label')->label('Текст кнопки')->maxLength(60)->placeholder('Обсудить поддержку'),
-                                Forms\Components\TextInput::make('note')->label('Сноска')->maxLength(500),
+                                Forms\Components\TextInput::make('note')->label('Сноска под карточкой')->maxLength(500),
+                            ]),
+                            Forms\Components\Grid::make(2)->schema([
+                                Forms\Components\FileUpload::make('offer_pdf')->label('Оффер в PDF')
+                                    ->disk('public')->directory('offers')->acceptedFileTypes(['application/pdf'])->maxSize(20480)
+                                    ->preserveFilenames()->downloadable()->openable()
+                                    ->helperText('Пока файла нет, ссылка «Скачать оффер» на сайте не показывается'),
+                                Forms\Components\TextInput::make('offer_pdf_label')->label('Текст ссылки')->maxLength(60)->placeholder('Скачать оффер · PDF'),
                             ]),
                         ]),
                     Forms\Components\TextInput::make('cta_label')->label('Текст кнопки, если тарифа нет')->maxLength(255),
+                ]),
+                Forms\Components\Tabs\Tab::make('Блоки')->schema([
+                    Forms\Components\Fieldset::make('Акцентный блок')->columns(1)->schema([
+                        Forms\Components\Textarea::make('highlight_title')->label('Заголовок')->rows(2)->maxLength(255)
+                            ->placeholder("Сначала стабильность.\nЗатем развитие."),
+                        Forms\Components\Textarea::make('highlight_text')->label('Текст')->rows(2)->maxLength(500),
+                    ]),
+                    Forms\Components\Fieldset::make('Как работаем')->columns(1)->schema([
+                        Forms\Components\TextInput::make('process_title')->label('Заголовок')->maxLength(255)->placeholder('Как работаем.'),
+                        Forms\Components\Repeater::make('process')->label('Пункты')
+                            ->simple(Forms\Components\Textarea::make('text')->rows(2)->required()->maxLength(300))
+                            ->reorderableWithButtons()->addActionLabel('Добавить пункт')->defaultItems(0),
+                    ]),
                 ]),
                 Forms\Components\Tabs\Tab::make('Шаги')->badge(fn (?Section $record) => $record?->steps()->count() ?: null)->schema([
                     Forms\Components\TextInput::make('steps_title')->label('Заголовок блока')->maxLength(255)->placeholder('Начнём с вашего портала.'),

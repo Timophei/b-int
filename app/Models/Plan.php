@@ -19,6 +19,12 @@ class Plan extends Model
         ];
     }
 
+    /** Ссылка на PDF-оффер, если файл загружен в админке. */
+    public function offerPdfUrl(): ?string
+    {
+        return $this->offer_pdf ? '/storage/'.$this->offer_pdf : null;
+    }
+
     public function section(): BelongsTo
     {
         return $this->belongsTo(Section::class);

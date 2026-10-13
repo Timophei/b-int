@@ -20,12 +20,11 @@ class SiteController extends Controller
     public function home(): View
     {
         $home = Section::byKey('home') ?? abort(404);
-        $sections = Section::navigation()->load(['services', 'plan', 'steps']);
+        $featured = Section::navigation()->firstWhere('key', 'support')?->load(['services', 'plans', 'steps']);
 
         return view('site.home', [
             'section' => $home,
-            'sections' => $sections,
-            'featured' => $sections->firstWhere('key', 'support'),
+            'featured' => $featured,
         ]);
     }
 

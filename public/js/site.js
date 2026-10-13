@@ -24,6 +24,23 @@
     send('/a/click', { k: link.dataset.track, l: link.dataset.label || link.textContent.trim().slice(0, 150), p: location.pathname });
   });
 
+  // Мобильное меню
+  var toggle = document.querySelector('[data-menu-toggle]');
+  var menu = document.getElementById('site-menu');
+  if (toggle && menu) {
+    var setOpen = function (open) {
+      toggle.setAttribute('aria-expanded', open ? 'true' : 'false');
+      menu.classList.toggle('is-open', open);
+    };
+    toggle.addEventListener('click', function () { setOpen(toggle.getAttribute('aria-expanded') !== 'true'); });
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape' && toggle.getAttribute('aria-expanded') === 'true') { setOpen(false); toggle.focus(); }
+    });
+    document.addEventListener('click', function (e) {
+      if (!menu.contains(e.target) && !toggle.contains(e.target)) { setOpen(false); }
+    });
+  }
+
   var form = document.querySelector('[data-lead-form]');
   if (form) {
     var entry = store.get('bi_entry') || {};

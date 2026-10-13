@@ -6,7 +6,7 @@
     <div class="wrap contact">
         <div class="contact-intro">
             @if ($section->eyebrow)<p class="kicker">{{ $section->eyebrow }}</p>@endif
-            <h1 class="h-big">{{ \App\Support\Typo::title($section->title) }}</h1>
+            <h1 class="h-support">{{ \App\Support\Typo::title($section->title) }}</h1>
             @if ($section->lead)<p class="lead">{{ $section->lead }}</p>@endif
             @include('site.partials.contacts')
             @if ($section->body)<div class="prose">{!! $section->body !!}</div>@endif

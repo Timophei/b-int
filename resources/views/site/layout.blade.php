@@ -17,9 +17,9 @@
     <meta name="description" content="{{ $pageDescription }}">
     @if ($section?->seo_keywords)<meta name="keywords" content="{{ $section->seo_keywords }}">@endif
     <link rel="canonical" href="{{ $canonical }}">
-    <link rel="icon" href="/img/icon.svg" type="image/svg+xml">
+    <link rel="icon" href="/img/icon.png" type="image/png">
     <link rel="icon" href="/favicon.ico" sizes="32x32">
-    <meta name="theme-color" content="#0b1d29">
+    <meta name="theme-color" content="#ffffff">
     <meta property="og:type" content="website">
     <meta property="og:site_name" content="{{ $settings->company_name }}">
     <meta property="og:locale" content="ru_RU">
@@ -33,10 +33,13 @@
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700&display=swap">
     <link rel="stylesheet" href="/css/site.css?v={{ @filemtime(public_path('css/site.css')) }}">
     @if (\App\Http\Controllers\SeoController::isMainHost(request()) && $settings->head_code){!! $settings->head_code !!}@endif
-    <script type="application/ld+json">{!! json_encode(array_filter([
-        '@context' => 'https://schema.org', '@type' => 'Organization', 'name' => $settings->company_name, 'url' => $root,
-        'email' => $settings->email, 'telephone' => $settings->phone, 'logo' => $root.'/img/logo.svg',
-    ]), JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES) !!}</script>
+    @php
+        $organization = array_filter([
+            '@'.'context' => 'https://schema.org', '@'.'type' => 'Organization', 'name' => $settings->company_name, 'url' => $root,
+            'email' => $settings->email, 'telephone' => $settings->phone, 'logo' => $root.'/img/logo-header.png',
+        ]);
+    @endphp
+    <script type="application/ld+json">{!! json_encode($organization, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES) !!}</script>
 </head>
 <body class="@yield('body_class')">
     @auth

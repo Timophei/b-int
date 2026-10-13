@@ -29,7 +29,7 @@ class AdminPanelProvider extends PanelProvider
             ->path('admin')
             ->login()
             ->brandName('Байкал Интеграция')
-            ->favicon('/img/icon.svg')
+            ->favicon('/img/icon.png')
             ->colors([
                 'primary' => Color::Sky,
             ])
